@@ -1,0 +1,14 @@
+bin\Debug\Chapter3_E1.exe
+bin\Debug\Chapter3_E1.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Chapter3_E1.Properties.Resources.resources
+obj\Debug\Chapter3_E1.csproj.GenerateResource.Cache
+obj\Debug\Chapter3_E1.exe
+obj\Debug\Chapter3_E1.pdb
+obj\Debug\Chapter3_E1.frmLogin.resources
+obj\Debug\Chapter3_E1.frmStudent.resources
+bin\Debug\Chapter3_E1.exe.manifest
+bin\Debug\Chapter3_E1.application
+obj\Debug\Chapter3_E1.TrustInfo.xml
+obj\Debug\Chapter3_E1.exe.manifest
+obj\Debug\Chapter3_E1.application

@@ -1,0 +1,86 @@
+using System;
+using System.Text;
+
+namespace Merge_Sort
+{
+    class List
+    {
+        private int[] arr = new int[20];
+        private int[] sorted = new int[20];
+        private int cmp_count; //Number of comparisons
+        private int mov_count; //Number of data movements
+
+        // Number of elements in array
+        private int n;
+
+        public List()
+        {
+            cmp_count = 0;
+            mov_count = 0;
+        }
+
+        void read()
+        {
+            // Get the number of elements to store in the array
+            while (true)
+            {
+                Console.Write("Enter the number of elements in the array: ");
+                string s = Console.ReadLine();
+                n = Int32.Parse(s);
+                if (n <= 20)
+                    break;
+                else
+                    Console.WriteLine("\nArray can have maximum 20 elements.\n");
+            }
+
+            Console.WriteLine("-----------------------");
+            Console.WriteLine(" Enter array elements  ");
+            Console.WriteLine("-----------------------");
+
+            // Get array elements
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write("<{0}> ", i + 1);
+                string s1 = Console.ReadLine();
+                arr[i] = Int32.Parse(s1);
+            }
+        }
+
+
+        void display()
+        {
+            Console.WriteLine("-----------------------");
+            Console.WriteLine(" Sorted array elements ");
+            Console.WriteLine("-----------------------");
+
+            for (int j = 0; j < n; j++)
+            {
+                Console.WriteLine(arr[j]);
+            }
+
+            Console.WriteLine("\nNumber of comparisons: " + cmp_count);
+            Console.WriteLine("\nNumber of data movements: " + mov_count);
+        }
+
+        static void Main(string[] args)
+        {
+            // Declaring the object of the class
+            List myList = new List();
+
+            // Accept array elements;
+            myList.read();
+
+            // Calling the sorting function
+            myList.m_sort(0, myList.getSize() - 1); //First call to merge sort algo.
+
+            // Display sorted array
+            myList.display();
+
+            // To exit from the console
+            Console.WriteLine("\n\nPress Return to exit.");
+            Console.Read();
+        }
+
+    }
+}
+

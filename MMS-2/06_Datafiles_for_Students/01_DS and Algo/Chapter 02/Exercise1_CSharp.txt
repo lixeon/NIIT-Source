@@ -1,0 +1,71 @@
+using System;
+
+class List
+{
+    // array of integers to hold values
+    private int[] a = new int[20];
+
+    // number of elements in array
+    private int n;
+
+    // Function to accept array elements
+    void read()
+    {
+        while (true)
+        {
+            Console.Write("Enter the number of elements in the array: ");
+            string s = Console.ReadLine();
+            n = Int32.Parse(s);
+            if (n <= 20)
+                break;
+            else
+                Console.WriteLine("\nArray can have maximum 20 elements.\n");
+        }
+
+        Console.WriteLine("");
+        Console.WriteLine("-----------------------");
+        Console.WriteLine(" Enter array elements  ");
+        Console.WriteLine("-----------------------");
+
+        // User inputs for the array 
+        for (int i = 0; i < n; i++)
+        {
+            Console.Write("<" + (i + 1) + "> ");
+            string s1 = Console.ReadLine();
+            a[i] = Int32.Parse(s1);
+        }
+    }
+    
+    // Function to display the contents of the array
+    void display()
+    {
+        Console.WriteLine("");
+        Console.WriteLine("-----------------------");
+        Console.WriteLine(" Sorted array elements ");
+        Console.WriteLine("-----------------------");
+
+        for (int j = 0; j < n; j++)
+        {
+            Console.WriteLine(a[j]);
+        }
+    }
+    
+    public static void Main()
+    {
+        // Creating the object of the SelectionSort class
+        List myList = new List();
+
+        // Accept the array elements
+        myList.read();
+
+        // Function call to sort array
+        myList.SelectionSortArray();
+
+        // Display the sorted array
+        myList.display();
+
+        // To exit from the console
+        Console.WriteLine("\n\nPress Return to exit.");
+        Console.Read();
+    }
+}

@@ -1,0 +1,141 @@
+#include<iostream.h>
+
+class Node
+{
+   /*Each node consists of the information part and a lik to the next node.*/
+   public:
+   int rollNumber;
+   char name[20];
+   Node * next;
+};
+
+class List
+{ 
+  Node *LAST;
+  public:
+  List();
+  void addNode();
+  bool Search(int rollNo, Node **current, Node **previous);
+  bool listEmpty();
+  bool delNode(int rollNo);
+  void traverse();
+  void firstNode();
+};
+
+List :: List()
+{
+   LAST=NULL;
+}
+
+
+bool List :: listEmpty()
+{
+	if (LAST == NULL)
+                return true;
+            else
+                return false;
+}
+
+
+bool List :: Search(int rollNo, Node **previous, Node **current)/*Checks whether th specified node is present in the list or not*/
+{
+   	for (*previous = *current = LAST->next; *current != LAST; *previous = *current, *current = (*current)->next)
+            {
+                if (rollNo == (*current)->rollNumber)
+                    return true;/*returns true if the node is found*/                
+            }
+	if (rollNo == LAST->rollNumber)/*If the node is present at the end*/                      
+                    return true;
+	else
+            return false;/*returns false if the node is not found*/  
+}
+
+void List :: traverse()/*Traverses the list*/
+{
+  
+			if(listEmpty())
+				cout<<"\nList is empty.\n";
+			else
+			{
+				cout<<"\nRecords in the list are:\n\n";
+			Node *currentNode;            
+            currentNode = LAST->next;
+            while (currentNode != LAST)
+            {
+                cout<<currentNode->rollNumber << "    "<<currentNode->name<<"\n";
+                currentNode = currentNode->next;
+            }
+            cout<<LAST->rollNumber<<"    "<<LAST->name<<"\n";            
+			}
+}
+
+void List :: firstNode()
+{
+if(listEmpty())
+cout<<"\nList is empty.\n";
+
+	else
+		cout<<"\nThe first record in the list is:\n\n "<<LAST->next->rollNumber<<"    "<<LAST->next->name<<endl;
+}
+
+void main()
+{
+   List obj;
+   int rollNo;
+   char ch;
+   while(1)
+   {
+     cout<<"\nMenu";	 
+     cout<<"\n1. View all the records in the list"<<endl;
+     cout<<"2. Search for a record in the list"<<endl;	
+	 cout<<"3. Display the first record in the list"<<endl;
+     cout<<"4. Exit"<<endl;
+     cout<<"\nEnter your choice (1-4): ";
+     cin>>ch;
+     switch(ch)
+     {        
+	case '1':
+		{
+		   obj.traverse();
+		}
+		break;
+
+	case '2':
+		{
+		   if(obj.listEmpty()==true)
+		   {
+			   cout<<"\nList is empty\n";
+			   break;
+		   }
+		   Node *prev,*curr;
+		   cout<<"\nEnter the roll number of the student whose record is to be searched: ";
+		   cin>>rollNo;
+		   if(obj.Search(rollNo, &prev, &curr)==false)
+   		   cout<<"\nRecord not found"<<endl;
+		   else
+		   {
+				cout<<"\nRecord found"<<endl;
+				cout<<"\nRoll number: "<<curr->rollNumber;
+				cout<<"\n\nName: "<<curr->name;
+				cout<<"\n";
+		   }
+		}
+		break;   
+	case '3':
+		{
+			obj.firstNode();
+		}
+		break;
+	case '4':
+		{
+			exit(0);
+		}
+		break;
+		default:
+		{
+			cout<<"Invalid option."<<endl;
+		}
+		break;
+     }
+   }
+}

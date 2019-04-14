@@ -1,0 +1,14 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Chapter7_E1.Form1.resources
+obj\Debug\Chapter7_E1.Properties.Resources.resources
+obj\Debug\Chapter7_E1.csproj.GenerateResource.Cache
+obj\Debug\Chapter7_E1.Form1.fr-FR.resources
+obj\Debug\Chapter7_E1.Form1.fr.resources
+bin\Debug\Chapter7_E1.exe
+bin\Debug\Chapter7_E1.pdb
+bin\Debug\fr-FR\Chapter7_E1.resources.dll
+bin\Debug\fr\Chapter7_E1.resources.dll
+obj\Debug\fr-FR\Chapter7_E1.resources.dll
+obj\Debug\fr\Chapter7_E1.resources.dll
+obj\Debug\Chapter7_E1.exe
+obj\Debug\Chapter7_E1.pdb

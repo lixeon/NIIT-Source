@@ -1,0 +1,10 @@
+bin\Debug\Chapter8_Ex5.exe
+bin\Debug\Chapter8_Ex5.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Chapter8_Ex5.Properties.Resources.resources
+obj\Debug\Chapter8_Ex5.csproj.GenerateResource.Cache
+obj\Debug\Chapter8_Ex5.exe
+obj\Debug\Chapter8_Ex5.pdb
+bin\Debug\CValidator.dll
+bin\Debug\CValidator.pdb
+obj\Debug\Chapter8_Ex5.CreditCardDetails.resources

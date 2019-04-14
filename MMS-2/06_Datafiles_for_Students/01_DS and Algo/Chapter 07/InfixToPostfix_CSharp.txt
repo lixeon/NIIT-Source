@@ -1,0 +1,195 @@
+using System;
+using System.Text;
+
+namespace InToPost
+{
+    class stack
+    {
+        public char[] stack_array = new char[50];
+        public int top;
+
+        public stack()
+        {
+            top = -1;
+        }
+
+        public void push(char symbol)
+        {
+            if (full())
+            {
+                Console.WriteLine("\nStack overflow");
+            }
+            else
+            {
+                top = top + 1;
+                stack_array[top] = symbol;
+            }
+        }
+
+        public char pop()
+        {
+            if (empty())
+                return ('#');   //Return value '#' indicates stack empty
+            else
+                return (stack_array[top--]);
+        }
+
+        public bool empty()
+        {
+            if (top == -1)
+                return (true);
+            else
+                return (false);
+        }
+
+        public bool full()
+        {
+            if (top == 49)
+                return (true);
+            else
+                return (false);
+        }
+    }
+
+    class Expression
+    {
+        char[] infix = new char[50];
+        char[] postfix = new char[50];
+
+        public void read()
+        {
+            Console.Write("\nEnter an infix expression: ");
+            infix = Console.ReadLine().ToCharArray();
+        }
+
+        public void ConvertToPostfix()
+        {
+            stack s = new stack();
+            int l, precedence, p;
+
+            char entry1, entry2;
+            l = infix.Length;
+            p = 0;
+
+            for (int i = 0; i < l; i++)
+            {
+                entry1 = infix[i];
+
+                if (!white_space(entry1))
+                {
+                    switch (entry1)
+                    {
+                        case '(':
+                            s.push(entry1);
+                            break;
+                        case ')':
+                            while ((entry2 = s.pop()) != '(')
+                                postfix[p++] = entry2;
+                            break;
+                        case '+':
+                        case '-':
+                        case '*':
+                        case '/':
+                            if (!s.empty())
+                            {
+                                precedence = prec(entry1);
+                                entry2 = s.pop();
+                                while (precedence <= prec(entry2))
+                                {
+                                    postfix[p++] = entry2;
+                                    if (!s.empty())
+                                        entry2 = s.pop();
+                                    else
+                                        break;
+                                }
+                                if (precedence > prec(entry2))
+                                    s.push(entry2);
+                            }
+                            s.push(entry1);
+                            break;
+                        default:
+                            postfix[p++] = entry1;
+                            break;
+                    }
+                }
+            }
+            while (!s.empty())//While not stack empty
+                postfix[p++] = s.pop();
+
+            string str = "";
+
+            foreach (char c in postfix)
+                str = str + c;
+
+            Console.WriteLine("\nThe postfix expression is : " + str);
+        }
+
+        public int prec(char symbol)
+        {
+            switch (symbol)
+            {
+                case '/': return (4);
+                case '*': return (3);  /*Precedence of / and * is 2 */
+                case '+': return (2);
+                case '-': return (1);  /*Precedence of + and - is 1 */
+                case '(': return (0);  /*Precedence of ( is 0 */
+                default: return (-1);
+
+            }
+        }
+
+        public bool white_space(char symbol)
+        {
+            if (symbol == ' ' || symbol == '\t' || symbol == '\0')
+                return true;
+            else
+                return false;
+        }
+
+        private bool openingParenthesis(char entry)
+        {
+            if ((entry == '(') || (entry == '{') || (entry == '['))
+                return (true);
+            else
+                return (false);
+        }
+
+        private bool closingParenthesis(char entry)
+        {
+            if ((entry == ')') || (entry == '}') || (entry == ']'))
+                return (true);
+            else
+                return (false);
+        }
+
+        private bool match(char entry1, char entry2)
+        {
+            if ((entry1 == '(') && (entry2 == ')'))
+                return (true);
+            else if ((entry1 == '{') && (entry2 == '}'))
+                return (true);
+            else if ((entry1 == '[') && (entry2 == ']'))
+                return (true);
+            else
+                return (false);
+
+        }
+
+        static void Main(string[] args)
+        {
+            Expression exp = new Expression();
+
+            char choice = 'y';
+
+            while (choice == 'y')
+            {
+                exp.read();
+                exp.ConvertToPostfix();
+                Console.Write("\nDo you want to continue? (y/n):");
+                choice = Char.Parse(Console.ReadLine());
+            }
+        }
+    }
+}
+
+

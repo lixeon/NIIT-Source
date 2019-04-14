@@ -1,0 +1,206 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="10/21/02 17:57:45" />
+    <title>Installation Notes</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="KVMReleaseIntro.html" />
+    <link rel="Next" href="KVMReleaseQA.html" />
+    <link rel="Index" href="KVMReleaseQA.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="KVMReleaseIntro.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="KVMReleaseQA.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp826782"> </a><h2 class="pChapNum">
+Chapter &#160; 2
+</h2>
+<a name="wp826783"> </a><h2 class="pNewHTMLPage">
+Installation Notes
+</h2>
+<hr class="pHr"/>
+<a name="wp826939"> </a><h2 class="pHeading1">
+2.1	General Comments
+</h2>
+<a name="wp826940"> </a><p class="pBody">
+The CLDC reference implementation source code release is <em class="cEmphasis">aimed primarily at device manufacturers</em> and other companies and individuals who want to port a small-footprint, general-purpose Java platform implementation onto their devices and platforms.
+</p>
+<a name="wp826941"> </a><p class="pBody">
+This release package contains the full source code of the K Virtual Machine and CLDC libraries, as well as a <em class="cEmphasis">KVM Porting Guide</em> document that is intended to help you in platform-specific porting efforts. The package does <em style="font-style: italic" class="cEmphasis">not</em> contain the MIDP APIs or any other J2ME profile APIs that you may need for building a complete J2ME implementation for a particular target device.
+</p>
+<a name="wp826948"> </a><p class="pBody">
+If you are not interested in porting efforts and are looking for a more &#8220;end-user-friendly&#8221; release package for J2ME application development, we encourage you to download and use one or both of the following packages:
+</p>
+<ul class="pBullet2"><a name="wp826953"> </a><div class="pBullet2"><li>J2ME Wireless Toolkit <br><a href="http://java.sun.com/products/j2mewtoolkit/" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/j2mewtoolkit/</span></a></li></div>
+<a name="wp826955"> </a><div class="pBullet2Last"><li>MIDP for Palm OS<br><a href="http://java.sun.com/products/midp/palmOS.html" target="_blank">
+<span class="cWebJump">http://java.sun.com/products/midp/palmOS.html</span></a></li></div>
+</ul>
+<a name="wp826966"> </a><p class="pBody">
+The installation instructions below are applicable only to those situations in which you intend to build the CLDC reference implementation from source code.
+</p>
+<a name="wp822005"> </a><h2 class="pHeading1">
+2.2	Unzipping the Distribution
+</h2>
+<a name="wp826218"> </a><p class="pBody">
+Unzip the distribution into any directory of your choice. It creates the directory <code class="cCode">j2me_cldc</code> with the following subdirectories:
+</p>
+<ul class="pBullet1"><a name="wp822007"> </a><div class="pBullet1"><li><code class="cCode">api</code></li></div>
+<a name="wp822009"> </a><div class="pBullet1Plus"><li><code class="cCode">bin</code></li></div>
+<a name="wp826653"> </a><div class="pBullet1Plus"><li><code class="cCode">build</code></li></div>
+<a name="wp822011"> </a><div class="pBullet1Plus"><li><code class="cCode">docs</code></li></div>
+<a name="wp826645"> </a><div class="pBullet1Plus"><li><code class="cCode">jam</code></li></div>
+<a name="wp822013"> </a><div class="pBullet1Plus"><li><code class="cCode">kvm</code></li></div>
+<a name="wp822015"> </a><div class="pBullet1Plus"><li><code class="cCode">samples</code></li></div>
+<a name="wp826540"> </a><div class="pBullet1Last"><li><code class="cCode">tools</code></li></div>
+</ul>
+<a name="wp826210"> </a><p class="pBody">
+Please refer to the <em style="font-style: italic" class="cEmphasis">KVM Porting Guide</em><span style="font-style: normal"> for further information on the contents of these directories.</span>
+</p>
+<a name="wp826719"> </a><h2 class="pHeading1">
+2.3	Building the Source Code Release
+</h2>
+<a name="wp826720"> </a><p class="pBody">
+The K Virtual Machine and the associated preverification tool have been written in the C programming language. This software has been compiled successfully with the following compilers:
+</p>
+<ul class="pBullet1"><a name="wp826825"> </a><div class="pBullet1"><li>Sun C Compiler 5.0, 5.2 and 5.3 on Solaris,</li></div>
+<a name="wp826826"> </a><div class="pBullet1Plus"><li>GNU C 2.91.66 (egcs-1.1.2) compiler on Red Hat Linux,</li></div>
+<a name="wp827004"> </a><div class="pBullet1Plus"><li>GNU C 2.95.2 compiler on Solaris and Windows NT 4.0,</li></div>
+<a name="wp826827"> </a><div class="pBullet1Last"><li>Microsoft Visual C++ 6.0 Professional on Windows NT 4.0 and Windows 2000.</li></div>
+</ul>
+<a name="wp826725"> </a><p class="pBody">
+In order to compile the Java library files, sample applications, and additional tools provided in the source release, Java Development Kit (JDK) 1.2.2 or later is required.
+</p>
+<a name="wp826484"> </a><p class="pBody">
+You should be able to build all the binaries included in this release from the source code files shipped with the release. The necessary GNU tools for building the binaries are not provided with this release, but can be downloaded from
+</p>
+<a name="wp826635"> </a><p class="pBody">
+<a href="http://www.gnu.org/software/software.html" target="_blank">
+<span class="cWebJump">http://www.gnu.org/software/software.html</span></a>
+</p>
+<a name="wp826622"> </a><p class="pBody">
+or
+</p>
+<a name="wp826629"> </a><p class="pBody">
+<a href="http://sources.redhat.com/cygwin" target="_blank">
+<span class="cWebJump">http://sources.redhat.com/cygwin</span></a>.
+</p>
+<hr class="pHr"/><div class="note">
+<a name="wp826485"> </a>
+<b>Note &#8211;</b>  Windows 2000 was used to build the Windows binary of KVM for this release.
+<hr class="pHr"/></div></note>
+<a name="wp826809"> </a><h3 class="pHeading2">
+2.3.1	Building the Release on Red Hat Linux
+</h3>
+<a name="wp826810"> </a><p class="pBody">
+Enter the <code class="cCode">build/linux</code> subdirectory and type <code class="cCode">gnumake</code>.
+</p>
+<a name="wp826816"> </a><h3 class="pHeading2">
+2.3.2	Building the Release on Solaris
+</h3>
+<a name="wp826817"> </a><p class="pBody">
+Enter the <code class="cCode">build/solaris</code> subdirectory and type <code class="cCode">gnumake</code>.
+</p>
+<a name="wp826640"> </a><h3 class="pHeading2">
+2.3.3	Building the Release on Windows 2000
+</h3>
+<a name="wp826489"> </a><p class="pBody">
+Enter the <code class="cCode">build/win32</code> subdirectory and type <code class="cCode">gnumake</code>.
+</p>
+<a name="wp827115"> </a><h2 class="pHeading1">
+2.4	Most Commonly Used Build Options
+</h2>
+<a name="wp827116"> </a><p class="pBody">
+The following parameters are commonly used when using <code class="cCode">gnumake</code> to build the KVM.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp827947"> </a>
+gnumake ROMIZING=false<a name="wp827948"> </a>
+</pre></div>
+<a name="wp827949"> </a><p class="pIndented2">
+Build the KVM with ROMizing disabled, that is, without linking all the system library classes statically into the KVM executable.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp827950"> </a>
+gnumake DEBUG=true<a name="wp827951"> </a>
+</pre></div>
+<a name="wp827952"> </a><p class="pIndented2">
+Build the KVM with the Java-level debugger interface enabled.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp827953"> </a>
+gnumake USE_JAM=true<a name="wp827954"> </a>
+</pre></div>
+<a name="wp827955"> </a><p class="pIndented2">
+Build the KVM with the Java Application Manager (JAM) enabled.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp827956"> </a>
+gnumake GCC=true<a name="wp827957"> </a>
+</pre></div>
+<a name="wp827958"> </a><p class="pIndented2">
+Use GNU C compiler when compiling the KVM source code.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+<a name="wp827959"> </a>
+gnumake USE_KNI=true<a name="wp827960"> </a>
+</pre></div>
+<a name="wp827961"> </a><p class="pIndented2">
+Build the KVM with the K Native Interface (KNI) enabled.
+</p>
+<a name="wp826858"> </a><p class="pBody">
+For more information on build options, as well as the various KVM compilation options, please refer to the <em style="font-style: italic" class="cEmphasis">KVM Porting Guide</em><span style="font-style: normal">.</span>
+</p>
+<a name="wp827138"> </a><p class="pBody">
+
+</p>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="KVMReleaseIntro.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="KVMReleaseQA.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">Release Notes <br> CLDC, 1.0.4</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved.</p>
+  </body>
+</html>

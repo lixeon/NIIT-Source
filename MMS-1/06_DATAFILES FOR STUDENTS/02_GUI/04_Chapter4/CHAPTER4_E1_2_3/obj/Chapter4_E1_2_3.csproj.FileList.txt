@@ -1,0 +1,10 @@
+obj\Debug\Chapter4_E1.exe
+obj\Debug\Chapter4_E1.pdb
+bin\Debug\Chapter4_E1.exe
+bin\Debug\Chapter4_E1.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Chapter4_E1.frmMain.resources
+obj\Debug\Chapter4_E1.frmFaculty.resources
+obj\Debug\Chapter4_E1.frmStudent.resources
+obj\Debug\Chapter4_E1.Properties.Resources.resources
+obj\Debug\Chapter4_E1_2_3.csproj.GenerateResource.Cache

@@ -1,0 +1,8 @@
+bin\Debug\Chapter3_AC2.exe
+bin\Debug\Chapter3_AC2.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Chapter3_AC2.Form1.resources
+obj\Debug\Chapter3_AC2.Properties.Resources.resources
+obj\Debug\Chapter3_AC2.csproj.GenerateResource.Cache
+obj\Debug\Chapter3_AC2.exe
+obj\Debug\Chapter3_AC2.pdb

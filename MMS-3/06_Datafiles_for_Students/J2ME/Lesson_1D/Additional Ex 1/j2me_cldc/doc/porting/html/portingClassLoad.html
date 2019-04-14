@@ -1,0 +1,262 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="GENERATOR" content="Quadralay WebWorks Publisher Professional Edition 7.0.2.1206" />
+    <meta name="TEMPLATEBASE" content="book-no-index" />
+    <meta name="LASTUPDATED" content="10/21/02 16:36:41" />
+    <title>Class Loading, JAR Files, and Inflation</title>
+    <link rel="StyleSheet" href="document.css" type="text/css" />
+    <link rel="StyleSheet" href="catalog.css" type="text/css" />
+    <link rel="Table of Contents" href="index.html" />
+    <link rel="Previous" href="portingStartup.html" />
+    <link rel="Next" href="porting64bit.html" />
+    <link rel="Index" href="portingJavaDebugger.html" />
+  </head>
+
+  <body>
+
+    <table id="SummaryNotReq1" width="100%">
+      <tr><td class="sun-darkblue">&#160;</td></tr>
+      <tr><td class="sun-lightblue">&#160;</td></tr>
+      <tr><td class="go-right">
+        <a accesskey="c" href="index.html">
+          <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+            alt="Contents" /></a>
+	<a accesskey="p" href="portingStartup.html">
+	  <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+            alt="Previous" /></a>
+        <a accesskey="n" href="porting64bit.html">
+	  <img id="LongDescNotReq3" src="images/next.gif" border="0"
+            alt="Next" /></a>
+       </td>
+      </tr>
+    </table>
+
+<a name="wp428285"> </a><h2 class="pChapNum">
+Chapter &#160; 8
+</h2>
+<a name="wp431763"> </a><h2 class="pNewHTMLPage">
+Class Loading, JAR Files, and Inflation
+</h2>
+<hr class="pHr"/>
+<a name="wp420644"> </a><p class="pBody">
+The KVM source code includes an implementation for reading Java class files from regular files/directories, as well as (possibly compressed) JAR files.
+</p>
+<a name="wp432314"> </a><p class="pBody">
+If you need to provide an alternative method for loading class files, you must define your own class loading mechanism. The default implementation in <code class="cCode">VmExtra/src/loaderFile.c</code> can be used as a starting point for platform-specific implementations.
+</p>
+<a name="wp433425"> </a><p class="pBody">
+The KVM code to read JAR files can also be used independently of reading class files. Applications that need to make their own use of JAR files can use these functions. In addition, the function that decompresses compressed JAR entries (a process called &#8220;inflation&#8221;), can also be used to decompress other information. For example, the PNG image format uses the same compression and decompression algorithms.
+</p>
+<a name="wp432303"> </a><h2 class="pHeading1">
+8.1	Generic class file loading
+</h2>
+<a name="wp434363"> </a><p class="pBody">
+You must define the C structure <code class="cCode">filePointerStruct</code>. The generic code uses the definitions
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;struct filePointerStruct;<a name="wp434364"> </a>
+&#160;&#160;&#160;&#160;typedef struct filePointerStruct *FILEPOINTER;<a name="wp434365"> </a>
+</pre></div>
+<a name="wp432289"> </a><p class="pBody">
+You must also define the following functions:
+</p>
+<ul class="pBullet1"><a name="wp422597"> </a><div class="pBullet1"><li><code class="cCode">void InitializeClassLoading()<br /></code>The code typically initializes the variable <code class="cCode">ClassPathTable</code> and any other variables needed for file loading upon virtual machine startup. Keep in mind that the value in <code class="cCode">ClassPathTable</code> is usually a root for garbage collection, and must either be <code class="cCode">NULL</code> or be an object allocated from the heap.</li></div>
+<a name="wp426422"> </a><div class="pBullet1Plus"><li>The C preprocessor constant <code class="cCode">PATH_SEPARATOR</code> indicates the character that separates directories in the class path. Its default value is <code class="cCode">&#39;:&#39;</code>. If you are using Windows or a similar implementation, you will need to change this value to <code class="cCode">&#39;;&#39;</code>. (Defined in <code class="cCode">VmExtra/h/loader.h</code>.)</li></div>
+<a name="wp432997"> </a><div class="pBullet1Plus"><li><code class="cCode">void FinalizeClassLoading()<br /></code>This function is the opposite of <code class="cCode">initializeClassLoading()</code>. This function performs the class loader finalization operations that are necessary when the virtual machine shuts down. Actual implementation will vary substantially depending on the target architecture.</li></div>
+<a name="wp422598"> </a><div class="pBullet1Plus"><li><code class="cCode">FILEPOINTER openClassfile(INSTANCE_CLASS clazz)<br /></code>Open the class file pointed to by the <code class="cCode">clazz</code> pointer.</li></div>
+<a name="wp433003"> </a><div class="pBullet1Plus"><li><code class="cCode">void closeClassfile(FILEPOINTER_HANDLE ClassFileH)<br /></code>Close the indicated class file. Close any system resources (such as file handles or database records) associated with the class file.</li></div>
+<a name="wp434626"> </a><div class="pBullet1Plus"><li><code class="cCode">void loadBytesNoEOFCheck(FILEPOINTER_HANDLE ClassFileH, <br /></code>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<code class="cCode">char *buffer, int len)<br /></code>Load the next <code class="cCode">len</code> bytes from the class file into the indicated buffer, but without checking for EOF.</li></div>
+<a name="wp431865"> </a><div class="pBullet1Plus"><li><code class="cCode">unsigned char loadByte(FILEPOINTER_HANDLE ClassFileH)<br />unsigned short loadShort(FILEPOINTER_HANDLE ClassFileH)<br />unsigned long loadCell(FILEPOINTER_HANDLE ClassFileH)<br /></code>Read the next one, two, or four bytes from the class file, and return the result as an unsigned 8-bit, unsigned 16-bit, or unsigned 32-bit value. 16- and 32-bit quantities in Java class files are always in big-endian format.</li></div>
+<a name="wp420660"> </a><div class="pBullet1Plus"><li><code class="cCode">void loadBytes(FILEPOINTER_HANDLE ClassFile, char *buffer,<br /></code>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<code class="cCode">int len)<br /></code>Load the next <code class="cCode">len</code> bytes from the class file into the indicated buffer.</li></div>
+<a name="wp420710"> </a><div class="pBullet1Last"><li><code class="cCode">void skipBytes(FILEPOINTER_HANDLE ClassFile, <br /></code>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<code class="cCode">unsigned int len)<br /></code>Skip the next <code class="cCode">len</code> bytes in the class file.</li></div>
+<a name="wp434641"> </a><div class="pBullet1Last"><li><code class="cCode">void getBytesAvailable(FILEPOINTER_HANDLE ClassFileH,<br /></code>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;<code class="cCode">unsigned int len)<br /></code>Get the next <code class="cCode">len</code> bytes in the class file.</li></div>
+</ul>
+<a name="wp432022"> </a><p class="pBody">
+The class file structure returned by <code class="cCode">openClassFile</code> must be an object allocated from the Java heap.
+</p>
+<a name="wp432023"> </a><h2 class="pHeading1">
+8.2	JAR file reader
+</h2>
+<a name="wp432544"> </a><p class="pBody">
+CLDC-compliant KVM implementations are required to be able to read class files from compressed JAR files. The location of the JAR file(s) is specified in an implementation-dependent manner.
+</p>
+<a name="wp433027"> </a><p class="pBody">
+Functions are provided in <code class="cCode">jar.c</code> for reading entries a JAR file. If the preprocessor symbol <code class="cCode">JAR_FILE_USES_STDIO</code> is non-zero, then these functions use C standard I/O routines to read the JAR file. If this preprocessor symbol is set to <code class="cCode">0</code>, this indicates that JAR files are in memory.
+</p>
+<a name="wp433296"> </a><p class="pBody">
+The JAR file reader uses the inflater, which is discussed in the next section.
+</p>
+<a name="wp433160"> </a><h3 class="pHeading2">
+8.2.1	Opening a JAR file
+</h3>
+<a name="wp433047"> </a><p class="pBody">
+Before using a JAR file, you must &#8220;open&#8221; it using the function 
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;bool_t openJARFile(void *nameOrAddress, int length,                       JAR_INFO entry)<a name="wp433052"> </a>
+</pre></div>
+<a name="wp433074"> </a><p class="pBody">
+The arguments are as follows:
+</p>
+<a name="wp433339"> </a><p class="pBody">
+If <code class="cCode">JAR_FILE_USES_STDIO</code> is non-zero, then the first argument is the name of the JAR file and the second argument is ignored.
+</p>
+<a name="wp433340"> </a><p class="pBody">
+If <code class="cCode">JAR_FILE_USES_STDIO</code> is zero, then the first argument is a pointer in memory to the beginning of the JAR file, and the second argument is the length, in bytes, of the JAR file.
+</p>
+<a name="wp433345"> </a><p class="pBody">
+The third argument is a pointer to a structure of type <code class="cCode">struct jarInfoStruct</code> defined in <code class="cCode">jar.h</code>. This structure is filled with information about the opened JAR file. This function returns <code class="cCode">TRUE</code> if it successfully managed to open the JAR file and parse its directory; it returns <code class="cCode">FALSE</code> otherwise.
+</p>
+<a name="wp433081"> </a><h3 class="pHeading2">
+8.2.2	Closing a JAR file
+</h3>
+<a name="wp433161"> </a><p class="pBody">
+If a JAR file has been successfully opened using <code class="cCode">openJARFile</code>, you must close the file when you are done. You must use the function:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;void closeJARFile(JAR_INFO entry)<a name="wp433082"> </a>
+</pre></div>
+<a name="wp433095"> </a><p class="pBody">
+The argument is a pointer to the same structure that was filled in by <code class="cCode">openJARFile</code>.
+</p>
+<a name="wp433162"> </a><h3 class="pHeading2">
+8.2.3	Reading a JAR file entry
+</h3>
+<a name="wp433109"> </a><p class="pBody">
+To read a specific entry in a JAR file, you use the function
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;void *<a name="wp434380"> </a>
+&#160;&#160;&#160;&#160;loadJARFileEntry(JAR_INFO jarFile,<a name="wp434381"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;const char *filename,<a name="wp434382"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;long *length, int extraBytes);<a name="wp434383"> </a>
+</pre></div>
+<a name="wp433122"> </a><p class="pBody">
+The <code class="cCode">jarFile</code> argument is a pointer to the structure filled in by <code class="cCode">openJARFile</code>. The <code class="cCode">filename</code> argument is the null-terminated name of the entry.<a href="#wp433363"><span class="Footnote">1</span></a> The <code class="cCode">extraBytes</code> entry indicates that the JAR reader should pad the result with that many extra bytes at the beginning.
+</p>
+<a name="wp433365"> </a><p class="pBody">
+If the JAR file reader is successful, it will set the <code class="cCode">*length</code> argument to the length of JAR file entry. This length does <em class="cEmphasis">not</em> include padding inserted because of the <code class="cCode">extraBytes</code> argument. The actual entry (plus padding) is returned as the result of this function.
+</p>
+<a name="wp433368"> </a><p class="pBody">
+If the JAR file reader could not find the entry, or if for some reason it was unable to read the entry, this function returns <code class="cCode">NULL</code>.
+</p>
+<a name="wp433185"> </a><p class="pBody">
+The result of this function is a heap-allocated object. If this function is called from within the KVM, then you must protect it, if necessary, from garbage collection.
+</p>
+<a name="wp433163"> </a><h3 class="pHeading2">
+8.2.4	Reading multiple JAR file directory
+</h3>
+<a name="wp433126"> </a><p class="pBody">
+To read the directory of a JAR file and possibly some of its entries, use the function
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;void loadJARFileEntries(JAR_INFO jarFile,<a name="wp434528"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;JARFileTestFunction testFunction,<a name="wp434468"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;JARFileRunFunction runFunction,<a name="wp434469"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;void* info);<a name="wp434470"> </a>
+</pre></div>
+<a name="wp433371"> </a><p class="pBody">
+The <code class="cCode">jarFile</code> argument is a pointer to the structure filled in by <code class="cCode">openJARFile</code>. The <code class="cCode">testFunction</code> and <code class="cCode">runFunction</code> arguments are callback functions whose use is described below. The <code class="cCode">info</code> argument is not used by the jar directory reader, but is passed on an argument to the <code class="cCode">testFunction</code> and <code class="cCode">runFunction</code> callbacks.
+</p>
+<a name="wp433378"> </a><p class="pBody">
+The <code class="cCode">testFunction</code> argument is a callback function that is called on each (non-directory) entry in the JAR file. It is called as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;typedef bool_t <a name="wp434388"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(*JARFileTestFunction)(const char *name,<a name="wp434389"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;int nameLength,<a name="wp434390"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;int *extraBytes,<a name="wp434391"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;void *info);<a name="wp434392"> </a>
+</pre></div>
+<a name="wp433166"> </a><p class="pBody">
+The <code class="cCode">name</code> and <code class="cCode">nameLength</code> argument specify the name of entry in the JAR file directory. The <code class="cCode">name</code> argument is <em class="cEmphasis">not</em> null terminated. The value <code class="cCode">*extraBytes</code> is initially zero, but you can change it to a different value to indicate that the result needs to be padded with extra bytes at the beginning. The <code class="cCode">info</code> argument is the same as whatever was passed to <code class="cCode">loadJARFileEntries</code>.
+</p>
+<a name="wp433404"> </a><p class="pBody">
+If this function returns <code class="cCode">TRUE</code>, it indicates that you want to read this entry. If this function returns <code class="cCode">FALSE</code>, you do not want to read this entry.
+</p>
+<a name="wp433167"> </a><p class="pBody">
+For every entry in which <code class="cCode">testFunction</code> returns <code class="cCode">TRUE</code>, the jar file reader reads the data and calls the <code class="cCode">runFunction</code> as follows:
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;typedef void <a name="wp434396"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(*JARFileRunFunction)(const char *name, int nameLength,<a name="wp434397"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;void *value, long length, void *info);<a name="wp434398"> </a>
+</pre></div>
+<a name="wp433174"> </a><p class="pBody">
+The <code class="cCode">name</code> and <code class="cCode">nameLength</code> arguments are the same as above. The <code class="cCode">value</code> argument gives the result of reading the JAR file entry. The <code class="cCode">length</code> argument is the length of the JAR file entry, not including any padding bytes. The <code class="cCode">info</code> argument is the same as whatever was passed to <code class="cCode">loadJARFileEntries</code>.
+</p>
+<a name="wp433413"> </a><p class="pBody">
+If reading the entry is unsuccessful, then the <code class="cCode">runFunction</code> is called with the <code class="cCode">value</code> argument set to <code class="cCode">NULL</code>.
+</p>
+<a name="wp434515"> </a><p class="pBody">
+The <code class="cCode">value</code> argument is allocated on the heap so it must be protected, if necessary, from garbage collection.
+</p>
+<a name="wp433190"> </a><h2 class="pHeading1">
+8.3	Inflation
+</h2>
+<a name="wp433299"> </a><p class="pBody">
+The inflate function can be used to decompress streams that have been compressed using the so-called deflation algorithm. This is the compression algorithm commonly used in JAR files and in the PNG image format.
+</p>
+<a name="wp433175"> </a><p class="pBody">
+The function that inflates JAR file entries can also be used for other purposes. The function is called with the following arguments.
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;typedef  int  (*JarGetByteFunctionType)(void *);<a name="wp434404"> </a>
+<a name="wp434405"> </a>
+&#160;&#160;&#160;&#160;bool_t inflateData(void *compData, JarGetByteFunctionType<a name="wp434660"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;getByte,<a name="wp434661"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;int compLen,<a name="wp434662"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;UNSIGNED_CHAR_HANDLE decompData,<a name="wp434663"> </a>
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;int decompLen);<a name="wp434664"> </a>
+</pre></div>
+<a name="wp433252"> </a><p class="pBody">
+This function decompresses a stream of <code class="cCode">compLen</code> bytes into a buffer of <code class="cCode">decompLen</code> bytes. Successive bytes of input are obtained by repeatedly calling
+</p>
+<div class="pPreformatted"><pre class="pPreformatted">
+&#160;&#160;&#160;&#160;getByteFunction(data)<a name="wp433266"> </a>
+</pre></div>
+<a name="wp433267"> </a><p class="pBody">
+This function will be called up to <code class="cCode">compLen + INFLATER_EXTRA_BYTES</code> times, where <code class="cCode">INFLATER_EXTRA_BYTES</code> is defined in <code class="cCode">inflate.h</code> to be the constant 4. Any values returned beyond the first <code class="cCode">compLen</code> calls to the function are immaterial.
+</p>
+<a name="wp434669"> </a><p class="pBody">
+The argument <code class="cCode">decompData</code> must be a pointer to a buffer handle of at least <code class="cCode">decompLen</code> characters. When using this function, the buffer must either not be in the heap, or <code class="cCode">decompData</code>must be registered with the garbage collector so that <code class="cCode">decompData </code>is updated if the buffer is moved.
+</p>
+<a name="wp433281"> </a><p class="pBody">
+This function returns <code class="cCode">TRUE</code> if the decompression is successful, and <code class="cCode">FALSE</code> otherwise.
+</p>
+
+  <a name="wp433363"> </a><div class="pFootNote">
+<a href="#wp433122"><span class="Footnote">1</span></a>Note that Jar files always use &#8216;/&#8217; as the directory separator character.
+
+</div>
+
+    <p>&#160;</p>
+    <hr class="pHr" />
+
+    <table id="SummaryNotReq2" width="100%">
+      <tr>
+        <td class="go-left">
+          <a accesskey="c" href="index.html">
+	    <img id="LongDescNotReq1" src="images/toc.gif" border="0"
+              alt="Contents" /></a>
+	  <a accesskey="p" href="portingStartup.html">
+	    <img id="LongDescNotReq2" src="images/prev.gif" border="0"
+              alt="Previous" /></a>
+	  <a accesskey="n" href="porting64bit.html">
+	    <img id="LongDescNotReq3" src="images/next.gif" border="0"
+              alt="Next" /></a>
+        </td>
+        <td class="go-right">
+          <span class="copyright">KVM Porting Guide <br /> CLDC, 1.0.4</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>&#160;</p>
+    <p class="copyright"><a 
+       href="copyright.html">Copyright</a> &#169;
+       2002 Sun Microsystems, Inc. All rights reserved.</p>
+  </body>
+</html>

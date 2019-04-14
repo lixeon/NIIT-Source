@@ -1,0 +1,41 @@
+1. Accept 20 numbers and store them in num1, num2, num3, …, num20
+2. Set max = num1
+3. If num2 > max then: 
+	max = num2
+4. If num3 > max then: 
+	max = num3
+5. If num4 > max then: 
+	max = num4
+6. If num5 > max then: 
+	max = num5
+7. If num6 > max then: 
+	max = num6
+8. If num7 > max then: 
+	max = num7
+9. If num8 > max then: 
+	max = num8
+10. If num9 > max then: 
+	max = num9
+11. If num10 > max then: 
+	max = num10
+12. If num11 > max then: 
+	max = num11
+13. If num12 > max then: 
+	max = num12
+14. If num13 > max then: 
+	max = num13
+15. If num14 > max then: 
+	max = num14
+16. If num15 > max then: 
+	max = num15
+17. If num16 > max then: 
+	max = num16
+18. If num17 > max then: 
+	max = num17
+19. If num18 > max then: 
+	max = num18
+20. If num19 > max then: 
+	max = num19
+21. If num20 > max then:
+	max = num20
+22. Display max

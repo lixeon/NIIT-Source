@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<EMPDETAILS>
+     <EMP EMPID="E001">
+          <EMPNAME>Karen</EMPNAME>
+          <DOB>10 Oct 1977</DOB>
+          <ADDRESS>Arden House, 1102</ADDRESS>
+          <DESIG>Manager</DESIG>
+     </EMP>
+     <EMP EMPID="E002">
+          <EMPNAME>George</EMPNAME>
+          <DOB>17 Dec 1965</DOB>
+          <ADDRESS>B27, Birmingham Road</ADDRESS>
+          <DESIG>Executive</DESIG>
+     </EMP>
+     <EMP EMPID="E003">
+          <EMPNAME>Steve</EMPNAME>
+          <DOB>02 Jan 1971</DOB>
+          <ADDRESS>6BH, Acock's Green House</ADDRESS>
+          <DESIG>Manager</DESIG>
+     </EMP>
+     <EMP EMPID="E004">
+          <EMPNAME>Ricky</EMPNAME>
+          <DOB>02 Mar 1969</DOB>
+          <ADDRESS>8/16 First Floor, M. K. Amhin Road</ADDRESS>
+          <DESIG>Clerk</DESIG>
+
+     </EMP>
+</EMPDETAILS>

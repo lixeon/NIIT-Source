@@ -1,0 +1,8 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Lesson5_AC1.frmEmployee.resources
+obj\Debug\Lesson5_AC1.Properties.Resources.resources
+obj\Debug\Lesson5_AC1.csproj.GenerateResource.Cache
+bin\Debug\Lesson5_AC1.exe
+bin\Debug\Lesson5_AC1.pdb
+obj\Debug\Lesson5_AC1.exe
+obj\Debug\Lesson5_AC1.pdb

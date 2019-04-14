@@ -1,0 +1,1 @@
+The Debugger agent is between the KVM and the JPDA Debugger, connected by socket connections.

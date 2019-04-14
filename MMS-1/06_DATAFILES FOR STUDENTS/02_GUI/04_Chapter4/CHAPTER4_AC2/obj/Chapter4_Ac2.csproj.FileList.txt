@@ -1,0 +1,9 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Chapter4_Ac2.Properties.Resources.resources
+obj\Debug\Chapter4_Ac2.csproj.GenerateResource.Cache
+bin\Debug\Chapter4_Ac2.exe
+bin\Debug\Chapter4_Ac2.pdb
+obj\Debug\Chapter4_Ac2.exe
+obj\Debug\Chapter4_Ac2.pdb
+obj\Debug\Chapter4_Ac2.frmMain.resources
+obj\Debug\Chapter4_Ac2.frmStudent.resources

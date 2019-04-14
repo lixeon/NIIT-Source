@@ -1,0 +1,6 @@
+bin\Debug\CValidator.dll
+bin\Debug\CValidator.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\CValidator.dll
+obj\Debug\CValidator.pdb
+bin\Debug\CValidator.dll.config

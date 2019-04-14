@@ -1,0 +1,10 @@
+bin\Debug\MyReport.exe
+bin\Debug\MyReport.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\MyReport.CrystalReport1.rpt
+obj\Debug\MyReport.frmReport.resources
+obj\Debug\MyReport.frmShowReport.resources
+obj\Debug\MyReport.Properties.Resources.resources
+obj\Debug\MyReport.csproj.GenerateResource.Cache
+obj\Debug\MyReport.exe
+obj\Debug\MyReport.pdb

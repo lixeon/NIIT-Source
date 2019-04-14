@@ -1,0 +1,183 @@
+#include<iostream.h>
+#include<string.h>
+class Node
+{
+	/* A Node class consists of three things, the information, reference to the 
+       right child, and reference to the left child. */
+	public:
+	char info[50];
+	Node *lchild;
+	Node *rchild;
+	Node(char i[20],Node *l,Node *r)
+	{
+		strcpy (info, i);
+		lchild = l;
+		rchild = r;
+	} /* Constructor for the Node class */
+};
+class BinaryTree
+{
+  public:
+  Node *ROOT;
+  BinaryTree();
+  void insert(char element[20]);
+  void find(char element[20], Node **parent,Node **location);
+  void inorder(Node *ptr);
+  void preorder(Node *ptr);  
+  void postorder(Node *ptr);
+  void remove();
+  void case_1(Node *parent,Node *currentNode);
+  void case_2(Node *parent,Node *currentNode);
+  void case_3(Node *parent,Node *currentNode);
+};
+
+BinaryTree :: BinaryTree()
+{
+	ROOT=NULL; /* Initializing ROOT to null */
+}
+
+void BinaryTree :: insert(char element[50]) /* Inserts a Node in the Binary Search Tree */
+{
+	Node *tmp, *parent,*currentNode;
+	find(element,&parent,&currentNode);
+	if(currentNode!=NULL) /* Checks if the node to be inserted is already present or not */
+	{
+		cout<<"\nDuplicate words not allowed";
+		return;
+	}
+	else /* If the specified Node is not present */
+	{
+		tmp=new Node(element,NULL,NULL); /* creates a Node */
+		if(parent==NULL) /* If the tree is empty */
+			ROOT=tmp;
+		else
+			if(strcmp(element,parent->info)<0)
+				parent->lchild=tmp;
+			else
+				parent->rchild=tmp;		
+	}
+}
+
+void BinaryTree :: find(char element[50],Node **parent, Node **currentNode)
+{
+	/* This function finds the currentNode of the specified Node as well as the 
+       currentNode of its parent. */
+
+			*currentNode = ROOT;
+            *parent = NULL;
+            while ((*currentNode != NULL) && (strcmp((*currentNode)->info,element) != 0))
+            {
+                *parent = *currentNode;
+                if (strcmp(element,(*currentNode)->info)<0)
+                    *currentNode = (*currentNode)->lchild;
+                else
+                    *currentNode = (*currentNode)->rchild;
+            } 	
+}
+
+void BinaryTree :: inorder(Node *ptr) /* Performs the inorder traversal of the tree */
+{
+	if(ROOT==NULL)
+	{
+		cout<<"Tree is empty";
+		return;
+	}		
+	if(ptr!=NULL)
+	{
+		inorder(ptr->lchild);
+		cout<<ptr->info<<"   ";
+		inorder(ptr->rchild);
+	}
+		
+}
+void BinaryTree :: preorder(Node *ptr) /* Performs the preorder traversal of the tree */
+{
+	if(ROOT==NULL)
+	{
+		cout<<"Tree is empty";
+		return;
+	}
+	if(ptr!=NULL)
+	{
+		cout<<ptr->info<<"   ";
+		preorder(ptr->lchild);
+		preorder(ptr->rchild);
+	}		
+}
+void BinaryTree :: postorder(Node *ptr) /* Performs the postorder traversal of the tree */
+{
+	if(ROOT==NULL)
+	{
+		cout<<"Tree is empty";
+		return;
+	}
+	if(ptr!=NULL)
+	{
+		postorder(ptr->lchild);
+		postorder(ptr->rchild);
+		cout<<ptr->info<<"   ";
+	}		
+}
+
+
+void main()
+{
+	BinaryTree b;
+	char ch,word[50];
+	int num;
+	while(1)
+	{
+		cout<<"\nMenu";;
+		cout<<"\n1. Implement insert operation"<<endl;
+		cout<<"2. Perform inorder traversal"<<endl;
+		cout<<"3. Perform preorder traversal"<<endl;
+		cout<<"4. Perform postorder traversal"<<endl;	
+		cout<<"5. Exit"<<endl;
+		cout<<"\nEnter your choice (1-5): ";
+		cin>>ch;
+		switch(ch)
+		{
+		case '1':
+			{
+				
+				cout<<"\nEnter a word: ";
+				cin>>word;
+				b.insert(word);
+			}
+			break;
+		case '2':
+			{
+				cout<<"\n";
+				b.inorder(b.ROOT);
+				cout<<"\n";
+			}
+			break;
+		case '3':
+			{
+				cout<<"\n";
+				b.preorder(b.ROOT);
+				cout<<"\n";
+			}
+			break;
+		case '4':
+			{;
+				cout<<"\n";
+				b.postorder(b.ROOT);
+				cout<<"\n";
+			}
+			break;		
+		case '5':
+			{
+				exit(0);
+			}
+			break;
+		default: 
+			{
+				cout<<"Invalid Option."<<endl;
+				break;
+			}
+		}
+
+
+	}
+}

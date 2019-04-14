@@ -1,0 +1,19 @@
+The Godfather|1972|Drama
+The Shawshank Redemption|1994|Drama
+The Godfather: Part II|1974|Drama
+The Lord of the Rings: The Return of the King|2003|Fantasy
+The Lord of the Rings: The Two Towers|2002|Fantasy
+Schindler's List|1993|Drama
+Shichinin no samurai|1954|Action
+Casablanca|1942|Drama
+The Lord of the Rings: The Fellowship of the Ring|2001|Fantasy
+Star Wars|1977|Sci-Fi
+Citizen Kane|1941|Mystery
+One Flew Over the Cuckoo's Nest|1975|Drama
+Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb|1964|Comedy
+Rear Window|1954|Thriller
+Star Wars: Episode V - The Empire Strikes Back|1980|Sci-Fi
+Raiders of the Lost Ark|1981|Action
+The Usual Suspects|1995|Mystery
+Pulp Fiction|1994|Crime
+Memento|2000|Mystery

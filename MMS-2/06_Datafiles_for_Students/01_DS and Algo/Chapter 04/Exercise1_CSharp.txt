@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace ConsoleApplication1
+{
+    class Names_List
+    {
+        string[] arr = new string[20];    //Array to be searched
+        int n;      //Number of elements in the array
+
+        // Function to obtain the value of n
+        void getTotalElements()
+        {
+            while (true)
+            {
+                Console.Write("Enter the number of elements in the array: ");
+                string s = Console.ReadLine();
+                n = Int32.Parse(s);
+                if (n <= 20)
+                    break;
+                else
+                    Console.WriteLine("\nArray can have maximum 20 elements.\n");
+            }
+
+        }
+
+        //Function to read array elements
+        void read()
+        {
+            //Accept array elements
+            Console.WriteLine("");
+            Console.WriteLine("-----------------");
+            Console.WriteLine(" Enter the names ");
+            Console.WriteLine("-----------------");
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write("<" + (i + 1) + "> ");
+                arr[i] = Console.ReadLine();
+            }
+        }
+
+
+        static void Main(string[] args)
+        {
+            Names_List nameList = new Names_List();
+
+            nameList.getTotalElements();
+            nameList.read();
+ 
+
+            char ch;
+
+            do
+            {
+                //Accept the name to be searched
+                Console.Write("\nEnter the name you want to search: ");
+                string item = Console.ReadLine();
+
+                Console.WriteLine();
+                nameList.linear_search(item);
+
+                
+                Console.Write("\nContinue search (y/n):");
+                ch = Char.Parse(Console.ReadLine());
+
+            } while ((ch == 'y') || (ch == 'Y'));
+        }
+    }
+}
